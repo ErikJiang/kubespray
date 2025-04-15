@@ -187,8 +187,13 @@ As Ansible is a python application, we will create a fresh virtual
 environment to install the dependencies for the Kubespray playbook:
 
 ```ShellSession
-python3 -m venv venv
-source venv/bin/activate
+# Install uv (if not already installed)
+pip install uv
+
+# Create and activate a virtual environment
+VENVDIR=venv
+uv venv $VENVDIR
+source $VENVDIR/bin/activate
 ```
 
 Next, we will git clone the Kubespray code into our working directory:
@@ -203,7 +208,7 @@ Now we need to install the dependencies for Ansible to run the Kubespray
 playbook:
 
 ```ShellSession
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 Copy ``inventory/sample`` as ``inventory/mycluster``:

@@ -79,11 +79,14 @@ The following is an example of setting up and running kubespray using `vagrant`.
 Customize your settings as shown, above, then run the commands:
 
 ```ShellSession
-# use virtualenv to install all python requirements
+# Install uv (if not already installed)
+$ pip install uv
+
+# use uv to create a virtual environment and install all python requirements
 VENVDIR=venv
-$ virtualenv --python=/usr/bin/python3.7 $VENVDIR
+$ uv venv $VENVDIR
 $ source $VENVDIR/bin/activate
-$ pip install -r requirements.txt
+$ uv pip install -r requirements.txt
 
 $ vagrant up
 

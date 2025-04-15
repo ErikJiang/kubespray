@@ -19,13 +19,14 @@ vagrant:
   services: []
   before_script:
     - echo $USER
-    - python3 -m venv citest
+    - pip install uv
+    - uv venv citest
     - source citest/bin/activate
     - vagrant plugin expunge --reinstall --force --no-tty
     - vagrant plugin install vagrant-libvirt
-    - pip install --no-compile --no-cache-dir pip -U
-    - pip install --no-compile --no-cache-dir -r $CI_PROJECT_DIR/requirements.txt
-    - pip install --no-compile --no-cache-dir -r $CI_PROJECT_DIR/tests/requirements.txt
+    - uv pip install --no-compile --no-cache-dir pip -U
+    - uv pip install --no-compile --no-cache-dir -r $CI_PROJECT_DIR/requirements.txt
+    - uv pip install --no-compile --no-cache-dir -r $CI_PROJECT_DIR/tests/requirements.txt
     - ./tests/scripts/vagrant_clean.sh
   script:
     - vagrant up

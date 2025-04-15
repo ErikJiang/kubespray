@@ -8,12 +8,15 @@ Depending on your available python version you may be limited in choosing which 
 It is recommended to deploy the ansible version used by kubespray into a python virtual environment.
 
 ```ShellSession
+# Install uv (if not already installed)
+pip install uv
+
 VENVDIR=kubespray-venv
 KUBESPRAYDIR=kubespray
-python3 -m venv $VENVDIR
+uv venv $VENVDIR
 source $VENVDIR/bin/activate
 cd $KUBESPRAYDIR
-pip install -U -r requirements.txt
+uv pip install -U -r requirements.txt
 ```
 
 In case you have a similar message when installing the requirements:

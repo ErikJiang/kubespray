@@ -9,9 +9,16 @@ It is recommended to use filter to manage the GitHub email notification, see [ex
 To install development dependencies you can set up a python virtual env with the necessary dependencies:
 
 ```ShellSession
-virtualenv venv
-source venv/bin/activate
-pip install -r tests/requirements.txt
+# Install uv (if not already installed)
+pip install uv
+
+# Create and activate virtual environment
+VENVDIR=venv
+uv venv $VENVDIR
+source $VENVDIR/bin/activate
+
+# Install dependencies
+uv pip install -r tests/requirements.txt
 ansible-galaxy install -r tests/requirements.yml
 ```
 
