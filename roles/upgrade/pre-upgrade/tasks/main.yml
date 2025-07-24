@@ -96,3 +96,25 @@
       fail:
         msg: "Failed to drain node {{ kube_override_hostname | default(inventory_hostname) }}"
       when: upgrade_node_fail_if_drain_fails
+
+- name: Get etcd version using etcdctl
+  command: "{{ bin_dir }}/etcdctl version"
+  register: etcdctl_version_output
+  changed_when: false
+  check_mode: no
+  delegate_to: "{{ groups['etcd'][0] }}"
+  run_once: true
+
+- name: Set etcd_installed_version fact from etcdctl output
+  set_fact:
+    etcd_installed_version: "{{ etcdctl_version_output.stdout | regex_search('etcdctl version: ([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
+  when: etcdctl_version_output.stdout is defined
+
+- name: Fail if etcd version is less than 3.5.20 for upgrade to 3.6.x
+  fail:
+    msg: "Current etcd version is {{ etcd_installed_version }}. Upgrading to etcd 3.6.x from a version lower than 3.5.20 is not recommended. Please upgrade to etcd 3.5.20 or newer first. See https://etcd.io/blog/2025/upgrade_from_3.5_to_3.6_issue/"
+  when:
+    - etcd_installed_version is defined
+    - etcd_installed_version is version('3.5.20', '<')
+    - etcd_version is version('3.6.0', '>=')
+  run_once: true
